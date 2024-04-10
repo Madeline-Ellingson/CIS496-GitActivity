@@ -13,6 +13,7 @@ pygame.init()
 
 SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
+# Removeed Full screen flag
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 pygame.display.set_caption("Chrome Dino Runner")
@@ -190,12 +191,16 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles
+    global game_speed, x_pos_bg, y_p
+    os_bg, points, obstacles
     run = True
+
     clock = pygame.time.Clock()
+    # More FPS
+    clock.tick(60)
     player = Dinosaur()
     cloud = Cloud()
-    game_speed = 20
+    game_speed = 5
     x_pos_bg = 0
     y_pos_bg = 380
     points = 0
@@ -239,7 +244,7 @@ def main():
         nonlocal pause
         pause = True
         font = pygame.font.Font("freesansbold.ttf", 30)
-        text = font.render("Game Paused, Press 'u' to Unpause", True, FONT_COLOR)
+        text = font.render("Theres no pause for asians, you'rea disgrace!", True, FONT_COLOR)
         textRect = text.get_rect()
         textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT  // 3)
         SCREEN.blit(text, textRect)
@@ -294,7 +299,6 @@ def main():
 
         score()
 
-        clock.tick(30)
         pygame.display.update()
 
 
@@ -313,9 +317,9 @@ def menu(death_count):
         font = pygame.font.Font("freesansbold.ttf", 30)
 
         if death_count == 0:
-            text = font.render("Press any Key to Start", True, FONT_COLOR)
+            text = font.render("Press Any key to make your parents proud", True, FONT_COLOR)
         elif death_count > 0:
-            text = font.render("Press any Key to Restart", True, FONT_COLOR)
+            text = font.render("You failed your Family", True, FONT_COLOR)
             score = font.render("Your Score: " + str(points), True, FONT_COLOR)
             scoreRect = score.get_rect()
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
