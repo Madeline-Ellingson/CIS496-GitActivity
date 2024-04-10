@@ -14,7 +14,7 @@ pygame.init()
 SCREEN_HEIGHT = 800
 SCREEN_WIDTH = 1200
 SCREEN = pygame.display.set_mode(
-    (SCREEN_WIDTH, SCREEN_HEIGHT), pygame.FULLSCREEN)
+    (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 WINDOW_HEIGHT = 600  # The height of your game window
 GROUND_IMAGE_HEIGHT = 100  # The height of your ground image
@@ -64,7 +64,7 @@ class Dinosaur:
     X_POS = 80
     Y_POS = 310
     Y_POS_DUCK = 340
-    JUMP_VEL = 8.5
+    JUMP_VEL = 14.5
 
     def __init__(self):
         self.duck_img = DUCKING
@@ -84,7 +84,13 @@ class Dinosaur:
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
 
+
     def update(self, userInput):
+        
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                
         if self.dino_duck:
             self.duck()
         if self.dino_run:
@@ -172,11 +178,11 @@ class Obstacle:
     def update(self):
         self.rect.x -= game_speed
         if self.rect.x < SCREEN_WIDTH // 2 and not self.jump:
-            self.rect.y -= 10  # Move the obstacle up
+            self.rect.y -= 0  # Move the obstacle up
             if self.rect.y < 0:  # If the obstacle has moved off the top of the screen
                 self.jump = True  # Stop it from moving up further
         elif self.jump:
-            self.rect.y += 10  # Move the obstacle down
+            self.rect.y += 0  # Move the obstacle down
             if self.rect.y + self.rect.height > GROUND_HEIGHT:  # If the obstacle has moved back to the ground
                 self.jump = False  # Allow it to jump again
         if self.rect.x < -self.rect.width:
@@ -220,9 +226,11 @@ def main():
     global game_speed, x_pos_bg, y_pos_bg, points, obstacles
     run = True
     clock = pygame.time.Clock()
+    clock.tick(60)
     player = Dinosaur()
     cloud = Cloud()
-    game_speed = 20
+    game_speed = 2
+    
     x_pos_bg = 0
     y_pos_bg = 380
     points = 0
@@ -312,7 +320,7 @@ def main():
             obstacle.draw(SCREEN)
             obstacle.update()
             if player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(2000)
+                pygame.time.delay(200)
                 death_count += 1
                 menu(death_count)
 
@@ -323,7 +331,7 @@ def main():
 
         score()
 
-        clock.tick(30)
+        #clock.tick(240)
         pygame.display.update()
 
 
@@ -344,7 +352,8 @@ def menu(death_count):
         if death_count == 0:
             text = font.render("Press any Key to Start", True, FONT_COLOR)
         elif death_count > 0:
-            text = font.render("Press any Key to Restart", True, FONT_COLOR)
+            
+            text = font.render("You Suck ! ", True, FONT_COLOR)
             score = font.render("Your Score: " + str(points), True, FONT_COLOR)
             scoreRect = score.get_rect()
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
@@ -372,12 +381,12 @@ def menu(death_count):
         SCREEN.blit(RUNNING[0], (SCREEN_WIDTH // 2 -
                     20, SCREEN_HEIGHT // 2 - 140))
         pygame.display.update()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.display.quit()
                 pygame.quit()
-                exit()
             if event.type == pygame.KEYDOWN:
                 main()
 
